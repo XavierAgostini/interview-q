@@ -1,38 +1,44 @@
 import { Box, Flex } from '@chakra-ui/react';
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React from 'react';
 
+import TableHeader from 'components/TableHeader'
 import Cell from 'components/Cell';
-
-const NUM_ROWS = 10;
-const NUM_COLUMNS = 10;
+import RowLabel from 'components/RowLabel'
+import { useSpreedSheet } from 'hooks/useSpreedSheet';
 
 const Spreadsheet: React.FC = () => {
-  const [spreadsheetState, setSpreadsheetState] = useState(
-    _.times(NUM_ROWS, () => _.times(NUM_COLUMNS, _.constant(''))),
-  );
+
+  const {
+    spreadsheetState,
+    selectedCell,
+    numCols,
+    onCellSelected,
+    onCellChange,
+  } = useSpreedSheet()
 
   return (
     <Box width="full">
+      <TableHeader
+        numCols={numCols}
+        selectedCol={selectedCell?.colIndex}
+      />
       {spreadsheetState.map((row, rowIdx) => {
         return (
           <Flex key={String(rowIdx)}>
+            <RowLabel
+              label={`${rowIdx}`}
+              isSelected={selectedCell?.rowIndex === rowIdx}
+            />
             {row.map((cellValue, columnIdx) => (
               <Cell
                 key={`${rowIdx}/${columnIdx}`}
+                rowIdx={rowIdx}
+                columnIdx={columnIdx}
+                isSelected={Boolean(selectedCell && selectedCell.rowIndex == rowIdx && selectedCell.colIndex == columnIdx)}
                 value={cellValue}
-                onChange={(newValue: string) => {
-                  const newRow = [
-                    ...spreadsheetState[rowIdx].slice(0, columnIdx),
-                    newValue,
-                    ...spreadsheetState[rowIdx].slice(columnIdx + 1),
-                  ];
-                  setSpreadsheetState([
-                    ...spreadsheetState.slice(0, rowIdx),
-                    newRow,
-                    ...spreadsheetState.slice(rowIdx + 1),
-                  ]);
-                }}
+                onClick={onCellSelected}
+                onChange={onCellChange}
               />
             ))}
           </Flex>

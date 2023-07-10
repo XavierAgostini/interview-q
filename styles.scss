@@ -1,3 +1,28 @@
 body {
   padding: 1rem;
 }
+
+.activeLabel {
+  background-color: #c5e0ff;
+}
+.rowLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  border: 1px solid grey;
+}
+.columnLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  height: 40px;
+  border: 1px solid grey;
+  text-align: center;
+}
+.cornerBox {
+  width: 80px;
+  padding: 0 23px;
+  background-color: gray;
+}
